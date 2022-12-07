@@ -1,0 +1,20 @@
+ARG BASE
+
+FROM ${BASE}
+
+ARG AUTHOR
+ARG VERSION
+
+LABEL maintainer=${AUTHOR} version=${VERSION}
+
+ARG TARGETOS
+ARG TARGETARCH
+
+COPY ./dist/awecloud-socks-$TARGETOS-$TARGETARCH /usr/bin/awecloud-socks
+COPY ./.beagle/config.json /etc/v2ray/config.json
+
+RUN set -ex \
+	&& apk add --no-cache openssl \
+	&& mkdir -p /etc/v2ray /usr/local/share/v2ray /var/log/v2ray
+
+ENTRYPOINT ["/usr/bin/awecloud-socks"]
